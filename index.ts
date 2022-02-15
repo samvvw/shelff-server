@@ -1,5 +1,6 @@
 import express from 'express'
 import dotenv from 'dotenv'
+dotenv.config()
 import { ApolloServer } from 'apollo-server-express'
 import { ApolloServerPluginDrainHttpServer } from 'apollo-server-core'
 import http from 'http'
@@ -7,7 +8,6 @@ import { TypeSource, IResolvers } from '@graphql-tools/utils'
 import { typeDefs, resolvers } from './src/schema'
 import db from './src/config/dbConfig'
 
-dotenv.config()
 const PORT = process.env.PORT
 
 const startApolloServer = async (
