@@ -1,17 +1,24 @@
 import { Pool } from 'pg'
 
-const client = new Pool({
-  //   user: 'postgres',
-  //   host: 'localhost',
-  //   database: 'shelff',
-  //   password: 'sam123456',
-  //   port: 5401,
-  user: 'postgres',
-  host: '35.171.223.156',
-  database: 'shelff_dev',
-  password: 'Sh3l11Db@2022',
-  port: 5432,
-})
+const poolParams =
+  process.env.NODE_ENV === 'development'
+    ? {
+        user: process.env.LOCAL_PG_USER,
+        host: process.env.LOCAL_PG_HOST,
+        database: process.env.LOCAL_PG_DATABASE_DEV,
+        password: process.env.LOCAL_PG_PASSWORD,
+        port: Number(process.env.LOCAL_PG_PORT as string),
+      }
+    : {
+        user: process.env.PG_USER,
+        host: process.env.PG_HOST,
+        database: process.env.PG_DATABASE_DEV,
+        password: process.env.PG_PASSWORD,
+        port: Number(process.env.PG_PORT as string),
+      }
+console.log(poolParams)
+
+const client = new Pool(poolParams)
 
 export default {
   query: (text: string, params?: string[]) => client.query(text, params),
