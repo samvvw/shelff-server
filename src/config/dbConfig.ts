@@ -5,17 +5,18 @@ const poolParams =
     ? {
         user: process.env.LOCAL_PG_USER,
         host: process.env.LOCAL_PG_HOST,
-        database: process.env.LOCAL_PH_DATABASE_DEV,
+        database: process.env.LOCAL_PG_DATABASE_DEV,
         password: process.env.LOCAL_PG_PASSWORD,
         port: Number(process.env.LOCAL_PG_PORT as string),
       }
     : {
         user: process.env.PG_USER,
         host: process.env.PG_HOST,
-        database: process.env.PH_DATABASE_DEV,
+        database: process.env.PG_DATABASE_DEV,
         password: process.env.PG_PASSWORD,
         port: Number(process.env.PG_PORT as string),
       }
+console.log(poolParams)
 
 const client = new Pool(poolParams)
 

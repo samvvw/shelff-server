@@ -24,7 +24,7 @@ const startApolloServer = async (
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
   })
 
-  const { rows } = await db.query(`SELECT * from public.user`, [])
+  const { rows } = await db.query(`SELECT * from public."user"`, [])
   console.log(rows)
   await server.start()
 
