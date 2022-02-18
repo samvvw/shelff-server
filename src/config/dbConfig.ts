@@ -1,4 +1,5 @@
 import { Pool } from 'pg'
+import { ShelfQueryTypes } from '../../shelff-types'
 
 const poolParams =
   process.env.NODE_ENV === 'development'
@@ -16,10 +17,10 @@ const poolParams =
         password: process.env.PG_PASSWORD,
         port: Number(process.env.PG_PORT as string),
       }
-console.log(poolParams)
 
 const client = new Pool(poolParams)
 
-export default {
-  query: (text: string, params?: string[]) => client.query(text, params),
-}
+const query: ShelfQueryTypes = (text: string, params?: string[]) =>
+  client.query(text, params)
+
+export default { query }
