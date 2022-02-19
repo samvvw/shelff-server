@@ -1,5 +1,5 @@
 import { gql } from 'apollo-server'
-import { getUser } from './controllers/userControllers'
+import { addUser, getUser } from './controllers/userControllers'
 
 const typeDefs = gql`
   type User {
@@ -108,6 +108,9 @@ const resolvers = {
     user: getUser,
     locations: getLocations,
     items: getItems,
+  },
+  Mutation: {
+    addUser: addUser,
   },
 }
 

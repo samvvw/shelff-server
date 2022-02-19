@@ -6,6 +6,21 @@ export const getUser = async (
   { dataSources }: UserContext
 ) => {
   const response = await dataSources.userService.getUser(args.userId)
-  console.log(response)
+  return response
+}
+
+export const addUser = async (
+  parent: undefined,
+  args: User,
+  { dataSources }: UserContext
+) => {
+  const { userId, userName, email, firstName, lastName } = args
+  const response = await dataSources.userService.addUser(
+    userId,
+    userName,
+    email,
+    firstName,
+    lastName
+  )
   return response
 }
