@@ -8,6 +8,7 @@ import { TypeSource, IResolvers } from '@graphql-tools/utils'
 import { typeDefs, resolvers } from './src/schema'
 import db from './src/config/dbConfig'
 import UserService from './src/services/UserService'
+import ItemService from './src/services/ItemService'
 
 const PORT = process.env.PORT
 
@@ -24,6 +25,7 @@ const startApolloServer = async (
     resolvers,
     dataSources: () => ({
       userService: new UserService(db),
+      itemService: new ItemService(db),
     }),
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
   })

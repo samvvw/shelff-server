@@ -1,5 +1,6 @@
 import { gql } from 'apollo-server'
 import { addUser, getUser } from './controllers/userControllers'
+import { getItems } from './controllers/itemControllers'
 
 const typeDefs = gql`
   type User {
@@ -90,17 +91,6 @@ const typeDefs = gql`
 
 const getLocations = () => {
   return [{ locationId: 123, locationName: 'Test location' }]
-}
-
-const getItems = () => {
-  return [
-    {
-      itemId: '1346513461236',
-      itemName: 'Test Item',
-      creationDate: Date.now(),
-      categoryName: 'Fruit',
-    },
-  ]
 }
 
 const resolvers = {
