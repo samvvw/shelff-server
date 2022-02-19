@@ -1,63 +1,5 @@
 import { gql } from 'apollo-server'
-interface User {
-  userId: string
-  userName: string
-  email: string
-  firstName: string
-  lastName: string
-  creationDate: Date
-}
-
-interface Item {
-  itemId: string
-  itemName: string
-  creationDate: Date
-  categoryId: number
-}
-interface ItemResolver {
-  itemId: string
-  itemName: string
-  creationDate: Date
-  categoryName: string
-}
-
-interface UserItem {
-  itemId: string
-  userId: string
-  expirationDate: Date
-  quantity: number
-  locationId: number
-  shelfId: number
-}
-
-interface UserItemResolver {
-  itemId: string
-  userId: string
-  expirationDate: Date
-  quantity: number
-  locationName: string
-  shelfName: string
-}
-
-interface Category {
-  categoryId: number
-  categoryName: string
-}
-
-interface Shelf {
-  shelfId: number
-  shelfName: string
-}
-
-interface Location {
-  locationId: number
-  locationName: string
-}
-
-interface ItemAction {
-  itemActionId: number
-  itemAction: string
-}
+import { addUser, getUser } from './controllers/userControllers'
 
 const typeDefs = gql`
   type User {
@@ -163,8 +105,12 @@ const getItems = () => {
 
 const resolvers = {
   Query: {
+    user: getUser,
     locations: getLocations,
     items: getItems,
+  },
+  Mutation: {
+    addUser: addUser,
   },
 }
 

@@ -7,6 +7,7 @@ import http from 'http'
 import { TypeSource, IResolvers } from '@graphql-tools/utils'
 import { typeDefs, resolvers } from './src/schema'
 import db from './src/config/dbConfig'
+import UserService from './src/services/UserService'
 
 const PORT = process.env.PORT
 
@@ -21,11 +22,12 @@ const startApolloServer = async (
   const server = new ApolloServer({
     typeDefs,
     resolvers,
+    dataSources: () => ({
+      userService: new UserService(db),
+    }),
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
   })
 
-  const { rows } = await db.query(`SELECT * from public."user"`, [])
-  console.log(rows)
   await server.start()
 
   server.applyMiddleware({ app })
