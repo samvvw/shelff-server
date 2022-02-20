@@ -1,6 +1,7 @@
 import { QueryResult } from 'pg'
 import UserService from './src/services/UserService'
 import ItemService from './src/services/ItemService'
+import CatalogService from './src/services/CatalogService'
 
 export interface User {
   userId: string
@@ -20,6 +21,12 @@ export interface UserContext {
 export interface ItemContext {
   dataSources: {
     itemService: ItemService
+  }
+}
+
+export interface CatalogContext {
+  dataSources: {
+    catalogService: CatalogService
   }
 }
 
