@@ -65,6 +65,46 @@ class UserService extends DataSource {
       return error
     }
   }
+
+  async addUserItem(
+    userId: string,
+    itemId: string,
+    quantity: number,
+    expirationDate: Date,
+    locationId: number,
+    shelfId: number
+  ): Promise<UserItem[] | unknown> {
+    try {
+      const response = await this.db.query(
+        `INSERT INTO public."userItem" ("userId", "itemId", "quantity", "expirationDate", "locationId", "shelfId") 
+         VALUES ($1, $2, $3, $4, $5, $6)`,
+        [
+          userId,
+          itemId,
+          quantity.toString(),
+          expirationDate.toString(),
+          locationId.toString(),
+          shelfId.toString(),
+        ]
+      )
+
+      if (response) {
+        const { rows } = await this.db.query(
+          `SELECT ui."itemId", ui."userId", ui."expirationDate", ui."quantity", l."locationName", s."shelfName" 
+           FROM public."userItem" ui, public.location l, public.shelf s 
+           WHERE ui."locationId" = l."locationId" 
+           AND ui."shelfId" = s."shelfId" 
+           AND ui."userId" = $1`,
+          [userId]
+        )
+
+        return rows as UserItem[]
+      }
+    } catch (error) {
+      console.log(error)
+      return error
+    }
+  }
 }
 
 export default UserService
