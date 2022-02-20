@@ -8,3 +8,17 @@ export const getItems = async (
   const response: Item[] | unknown = await dataSources.itemService.getItems()
   return response
 }
+
+export const addItem = async (
+  parent: undefined,
+  args: Item,
+  { dataSources }: ItemContext
+) => {
+  const { itemId, itemName, categoryId } = args
+  const response = await dataSources.itemService.addItem(
+    itemId,
+    itemName,
+    categoryId
+  )
+  return response
+}

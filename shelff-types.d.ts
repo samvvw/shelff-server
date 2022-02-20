@@ -27,7 +27,7 @@ export interface Item {
   itemId: string
   itemName: string
   creationDate: Date
-  categoryId?: number
+  categoryId: number
   categoryName: string
 }
 
