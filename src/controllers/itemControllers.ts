@@ -22,3 +22,17 @@ export const addItem = async (
   )
   return response
 }
+
+export const updateItem = async (
+  parent: undefined,
+  args: Item,
+  { dataSources }: ItemContext
+) => {
+  const { itemId, itemName, categoryId } = args
+  const response = await dataSources.itemService.updateItem(
+    itemId,
+    itemName,
+    categoryId
+  )
+  return response
+}
