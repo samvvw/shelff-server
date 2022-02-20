@@ -1,4 +1,4 @@
-import { User, UserContext } from '../../shelff-types'
+import { User, UserContext, UserItem } from '../../shelff-types'
 
 export const getUser = async (
   parent: undefined,
@@ -6,6 +6,15 @@ export const getUser = async (
   { dataSources }: UserContext
 ) => {
   const response = await dataSources.userService.getUser(args.userId)
+  return response
+}
+
+export const getUserItems = async (
+  parent: undefined,
+  args: UserItem,
+  { dataSources }: UserContext
+) => {
+  const response = await dataSources.userService.getUserItems(args.userId)
   return response
 }
 
