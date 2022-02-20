@@ -5,6 +5,7 @@ import {
   getUser,
   getUserItems,
   updateUserItem,
+  deleteUserItem,
 } from './controllers/userControllers'
 import { getItems, addItem, updateItem } from './controllers/itemControllers'
 
@@ -112,6 +113,7 @@ const resolvers = {
     addUserItem: addUserItem,
     updateItem: updateItem,
     updateUserItem: updateUserItem,
+    deleteUserItem: deleteUserItem,
   },
 }
 

@@ -146,6 +146,34 @@ class UserService extends DataSource {
       return error
     }
   }
+
+  async deleteUserItem(
+    userId: string,
+    itemId: string
+  ): Promise<boolean | unknown> {
+    try {
+      const query = await this.db.query(
+        `SELECT * 
+         FROM public."userItem" 
+         WHERE "userId" = $1 AND "itemId" = $2`,
+        [userId, itemId]
+      )
+
+      if (query && query.rows.length) {
+        const response = await this.db.query(
+          `DELETE FROM public."userItem" WHERE "userId" = $1 AND "itemId" = $2`,
+          [userId, itemId]
+        )
+
+        if (response) return true
+      }
+
+      return false
+    } catch (error) {
+      console.log(error)
+      return error
+    }
+  }
 }
 
 export default UserService
