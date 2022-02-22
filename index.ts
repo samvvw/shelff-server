@@ -9,6 +9,7 @@ import { typeDefs, resolvers } from './src/schema'
 import db from './src/config/dbConfig'
 import UserService from './src/services/UserService'
 import ItemService from './src/services/ItemService'
+import CatalogService from './src/services/CatalogService'
 
 const PORT = process.env.PORT
 
@@ -26,6 +27,7 @@ const startApolloServer = async (
     dataSources: () => ({
       userService: new UserService(db),
       itemService: new ItemService(db),
+      catalogService: new CatalogService(db),
     }),
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
   })

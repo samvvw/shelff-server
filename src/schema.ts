@@ -8,6 +8,7 @@ import {
   deleteUserItem,
 } from './controllers/userControllers'
 import { getItems, addItem, updateItem } from './controllers/itemControllers'
+import { getCategories } from './controllers/catalogControllers'
 
 const typeDefs = gql`
   type User {
@@ -37,7 +38,7 @@ const typeDefs = gql`
 
   type Category {
     categoryId: Int!
-    category: String!
+    categoryName: String!
   }
 
   type Shelf {
@@ -106,6 +107,7 @@ const resolvers = {
     locations: getLocations,
     items: getItems,
     userItems: getUserItems,
+    categories: getCategories,
   },
   Mutation: {
     addUser: addUser,
