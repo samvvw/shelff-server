@@ -50,3 +50,30 @@ export const addUserItem = async (
   )
   return response
 }
+
+export const updateUserItem = async (
+  parent: undefined,
+  args: UserItem,
+  { dataSources }: UserContext
+) => {
+  const { userId, itemId, quantity, expirationDate, locationId, shelfId } = args
+  const response = await dataSources.userService.updateUserItem(
+    userId,
+    itemId,
+    quantity,
+    expirationDate,
+    locationId,
+    shelfId
+  )
+  return response
+}
+
+export const deleteUserItem = async (
+  parent: undefined,
+  args: UserItem,
+  { dataSources }: UserContext
+) => {
+  const { userId, itemId } = args
+  const response = await dataSources.userService.deleteUserItem(userId, itemId)
+  return response
+}

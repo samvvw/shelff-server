@@ -105,6 +105,75 @@ class UserService extends DataSource {
       return error
     }
   }
+
+  async updateUserItem(
+    userId: string,
+    itemId: string,
+    quantity: number,
+    expirationDate: Date,
+    locationId: number,
+    shelfId: number
+  ): Promise<UserItem | unknown> {
+    try {
+      const response = await this.db.query(
+        `UPDATE public."userItem" 
+         SET "quantity" = $3, "expirationDate" = $4, "locationId" = $5, "shelfId" = $6 
+         WHERE "userId" = $1 AND "itemId" = $2`,
+        [
+          userId,
+          itemId,
+          quantity.toString(),
+          expirationDate.toString(),
+          locationId.toString(),
+          shelfId.toString(),
+        ]
+      )
+
+      if (response) {
+        const { rows } = await this.db.query(
+          `SELECT ui."itemId", ui."userId", ui."expirationDate", ui."quantity", l."locationName", s."shelfName" 
+           FROM public."userItem" ui, public.location l, public.shelf s 
+           WHERE ui."locationId" = l."locationId" 
+           AND ui."shelfId" = s."shelfId" 
+           AND ui."userId" = $1 AND ui."itemId" = $2`,
+          [userId, itemId]
+        )
+
+        return rows[0] as UserItem
+      }
+    } catch (error) {
+      console.log(error)
+      return error
+    }
+  }
+
+  async deleteUserItem(
+    userId: string,
+    itemId: string
+  ): Promise<boolean | unknown> {
+    try {
+      const query = await this.db.query(
+        `SELECT * 
+         FROM public."userItem" 
+         WHERE "userId" = $1 AND "itemId" = $2`,
+        [userId, itemId]
+      )
+
+      if (query && query.rows.length) {
+        const response = await this.db.query(
+          `DELETE FROM public."userItem" WHERE "userId" = $1 AND "itemId" = $2`,
+          [userId, itemId]
+        )
+
+        if (response) return true
+      }
+
+      return false
+    } catch (error) {
+      console.log(error)
+      return error
+    }
+  }
 }
 
 export default UserService
