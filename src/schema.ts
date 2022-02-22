@@ -8,7 +8,11 @@ import {
   deleteUserItem,
 } from './controllers/userControllers'
 import { getItems, addItem, updateItem } from './controllers/itemControllers'
-import { getCategories } from './controllers/catalogControllers'
+import {
+  getCategories,
+  getLocations,
+  getShelves,
+} from './controllers/catalogControllers'
 
 const typeDefs = gql`
   type User {
@@ -97,10 +101,6 @@ const typeDefs = gql`
   }
 `
 
-const getLocations = () => {
-  return [{ locationId: 123, locationName: 'Test location' }]
-}
-
 const resolvers = {
   Query: {
     user: getUser,
@@ -108,6 +108,7 @@ const resolvers = {
     items: getItems,
     userItems: getUserItems,
     categories: getCategories,
+    shelves: getShelves,
   },
   Mutation: {
     addUser: addUser,
