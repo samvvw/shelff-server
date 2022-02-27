@@ -1,5 +1,5 @@
 import { DataSource } from 'apollo-datasource'
-import { DBTypes, Item } from '../../shelff-types'
+import { DBTypes, Item, ItemAction } from '../../shelff-types'
 class ItemService extends DataSource {
   db: DBTypes
   constructor(db: DBTypes) {
@@ -14,6 +14,17 @@ class ItemService extends DataSource {
       )
 
       return rows as Item[]
+    } catch (error) {
+      console.log(error)
+      return error
+    }
+  }
+
+  async getItemActions(): Promise<ItemAction[] | unknown> {
+    try {
+      const { rows } = await this.db.query('SELECT * FROM public."itemAction"')
+
+      return rows as ItemAction[]
     } catch (error) {
       console.log(error)
       return error
