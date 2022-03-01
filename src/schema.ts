@@ -7,7 +7,12 @@ import {
   updateUserItem,
   deleteUserItem,
 } from './controllers/userControllers'
-import { getItems, addItem, updateItem } from './controllers/itemControllers'
+import {
+  getItems,
+  getItemActions,
+  addItem,
+  updateItem,
+} from './controllers/itemControllers'
 import {
   getCategories,
   getLocations,
@@ -109,6 +114,7 @@ const resolvers = {
     userItems: getUserItems,
     categories: getCategories,
     shelves: getShelves,
+    itemActions: getItemActions,
   },
   Mutation: {
     addUser: addUser,

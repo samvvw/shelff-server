@@ -1,4 +1,4 @@
-import { Item, ItemContext } from '../../shelff-types'
+import { Item, ItemAction, ItemContext } from '../../shelff-types'
 
 export const getItems = async (
   parent: undefined,
@@ -6,6 +6,16 @@ export const getItems = async (
   { dataSources }: ItemContext
 ) => {
   const response: Item[] | unknown = await dataSources.itemService.getItems()
+  return response
+}
+
+export const getItemActions = async (
+  parent: undefined,
+  args: undefined,
+  { dataSources }: ItemContext
+) => {
+  const response: ItemAction[] | unknown =
+    await dataSources.itemService.getItemActions()
   return response
 }
 
