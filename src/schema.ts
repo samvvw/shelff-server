@@ -22,10 +22,8 @@ import {
 const typeDefs = gql`
   type User {
     userId: String!
-    userName: String!
     email: String!
-    firstName: String!
-    lastName: String!
+    fullName: String!
     creationDate: String
   }
 
@@ -76,14 +74,8 @@ const typeDefs = gql`
   }
 
   type Mutation {
-    addUser(
-      userId: String
-      userName: String
-      email: String
-      firstName: String
-      lastName: String
-    ): User
-    updateUser(userName: String, firstName: String, lastName: String): User
+    addUser(userId: String, email: String, fullName: String): User
+    updateUser(fullName: String): User
     addItem(itemId: String, itemName: String, categoryId: Int): Item
     updateItem(itemId: String, itemName: String, categoryId: Int): Item
     addUserItem(

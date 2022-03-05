@@ -23,13 +23,11 @@ export const addUser = async (
   args: User,
   { dataSources }: UserContext
 ) => {
-  const { userId, userName, email, firstName, lastName } = args
+  const { userId, fullName, email } = args
   const response = await dataSources.userService.addUser(
     userId,
-    userName,
-    email,
-    firstName,
-    lastName
+    fullName,
+    email
   )
   return response
 }

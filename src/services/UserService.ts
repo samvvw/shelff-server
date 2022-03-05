@@ -41,15 +41,22 @@ class UserService extends DataSource {
 
   async addUser(
     userId: string,
-    userName: string,
-    email: string,
-    firstName: string,
-    lastName: string
+    fullName: string,
+    email: string
   ): Promise<User | unknown> {
     try {
+      const { rows: users } = await this.db.query(
+        'SELECT * FROM public.user WHERE "userId"=$1',
+        [userId]
+      )
+
+      if (users) {
+        return users[0] as User
+      }
+
       const response = await this.db.query(
-        'INSERT INTO public.user ("userId", "userName", "email", "firstName", "lastName") VALUES ($1, $2, $3, $4, $5)',
-        [userId, userName, email, firstName, lastName]
+        'INSERT INTO public.user ("userId", "fullName", "email") VALUES ($1, $2, $3)',
+        [userId, fullName, email]
       )
 
       if (response) {

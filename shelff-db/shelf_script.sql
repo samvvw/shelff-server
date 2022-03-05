@@ -42,9 +42,8 @@ CREATE TABLE IF NOT EXISTS public."item"
 CREATE TABLE IF NOT EXISTS public."user"
 (
     "userId" character varying(100) NOT NULL,
-    "userName" character varying(20) COLLATE pg_catalog."default" NOT NULL,
-    "email" character varying(50) COLLATE pg_catalog."default" NOT NULL,
     "fullName" character varying(150) COLLATE pg_catalog."default" NOT NULL,
+    "email" character varying(50) COLLATE pg_catalog."default" NOT NULL,
     "creationDate" date NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT "user_pkey" PRIMARY KEY ("userId")
 );
