@@ -5,10 +5,8 @@ import CatalogService from './src/services/CatalogService'
 
 export interface User {
   userId: string
-  userName: string
+  fullName: string
   email: string
-  firstName: string
-  lastName: string
   creationDate: Date
 }
 
