@@ -50,7 +50,7 @@ class UserService extends DataSource {
         [userId]
       )
 
-      if (users) {
+      if (users.length > 0) {
         return users[0] as User
       }
 
