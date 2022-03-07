@@ -61,6 +61,26 @@ CREATE TABLE IF NOT EXISTS public."userItem"
     CONSTRAINT "userItem_pk" PRIMARY KEY ("userId", "itemId", "creationDate")
 );
 
+CREATE TABLE IF NOT EXISTS public."userEssentials"
+(
+    "userId" character varying(100) NOT NULL,
+    "itemId" character varying(50) NOT NULL,
+    "creationDate" timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT "userEssentials_pk" PRIMARY KEY ("userId", "itemId")
+);
+
+ALTER TABLE IF EXISTS public."userEssentials"
+    ADD CONSTRAINT "userId_essential_constraint" FOREIGN KEY ("userId")
+    REFERENCES public."user" ("userId") MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION;
+    
+ALTER TABLE IF EXISTS public."userEssentials"
+    ADD CONSTRAINT "itemId_essential_constraint" FOREIGN KEY ("itemId")
+    REFERENCES public."item" ("itemId") MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION;
+    
 
 ALTER TABLE IF EXISTS public."item"
     ADD CONSTRAINT "categoryId_constraint" FOREIGN KEY ("categoryId")

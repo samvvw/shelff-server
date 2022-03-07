@@ -81,6 +81,12 @@ export interface ItemAction {
   itemAction: string
 }
 
+export interface ItemEssential {
+  itemId: string
+  itemName: string
+  creationDate: Date
+}
+
 export type ShelfResult =
   | User
   | Item
@@ -89,6 +95,7 @@ export type ShelfResult =
   | Shelf
   | Location
   | ItemAction
+  | ItemEssential
 
 export type ShelfQueryTypes = (
   text: string,
