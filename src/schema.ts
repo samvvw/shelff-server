@@ -12,6 +12,7 @@ import {
   getItemActions,
   addItem,
   updateItem,
+  getEssentials,
 } from './controllers/itemControllers'
 import {
   getCategories,
@@ -63,6 +64,12 @@ const typeDefs = gql`
     itemAction: String!
   }
 
+  type ItemEssential {
+    itemId: String!
+    itemName: String!
+    creationDate: String!
+  }
+
   type Query {
     locations: [Location]
     items: [Item]
@@ -71,6 +78,7 @@ const typeDefs = gql`
     shelves: [Shelf]
     user(userId: String): User
     userItems(userId: String): [UserItem]
+    essentials(userId: String): [ItemEssential]
   }
 
   type Mutation {
@@ -107,6 +115,7 @@ const resolvers = {
     categories: getCategories,
     shelves: getShelves,
     itemActions: getItemActions,
+    essentials: getEssentials,
   },
   Mutation: {
     addUser: addUser,

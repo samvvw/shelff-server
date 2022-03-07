@@ -1,4 +1,10 @@
-import { Item, ItemAction, ItemContext } from '../../shelff-types'
+import {
+  Item,
+  ItemAction,
+  ItemContext,
+  ItemEssential,
+  User,
+} from '../../shelff-types'
 
 export const getItems = async (
   parent: undefined,
@@ -44,5 +50,15 @@ export const updateItem = async (
     itemName,
     categoryId
   )
+  return response
+}
+
+export const getEssentials = async (
+  parent: undefined,
+  args: User,
+  { dataSources }: ItemContext
+) => {
+  const response: ItemEssential[] | unknown =
+    await dataSources.itemService.getEssentials(args.userId)
   return response
 }

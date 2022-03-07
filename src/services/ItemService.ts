@@ -1,5 +1,5 @@
 import { DataSource } from 'apollo-datasource'
-import { DBTypes, Item, ItemAction } from '../../shelff-types'
+import { DBTypes, Item, ItemAction, ItemEssential } from '../../shelff-types'
 class ItemService extends DataSource {
   db: DBTypes
   constructor(db: DBTypes) {
@@ -75,6 +75,30 @@ class ItemService extends DataSource {
 
         return rows[0] as Item
       }
+    } catch (error) {
+      console.log(error)
+      return error
+    }
+  }
+
+  async getEssentials(userId: string): Promise<ItemEssential[] | unknown> {
+    try {
+      const { rows } = await this.db.query(
+        `SELECT i."itemId", i."itemName", ui."creationDate" 
+        FROM public."userItem" ui, public."userEssentials" ue, public."item" i
+        WHERE ui."itemId" = ue."itemId" AND ui."itemId" = i."itemId"
+        AND ui."userId" = $1
+        AND ui."isEssential" = true
+        AND ui."creationDate" IN (SELECT "creationDate"
+        FROM public."userItem"
+        WHERE "userId" = $1
+        AND ui."itemId" = "itemId"
+        ORDER BY "creationDate" DESC
+        LIMIT 1)`,
+        [userId]
+      )
+
+      return rows as ItemEssential[]
     } catch (error) {
       console.log(error)
       return error
