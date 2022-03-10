@@ -85,6 +85,7 @@ export interface ItemEssential {
   itemId: string
   itemName: string
   creationDate: Date
+  categoryName: string
 }
 
 export type ShelfResult =

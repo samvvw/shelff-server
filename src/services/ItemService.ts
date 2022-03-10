@@ -84,9 +84,10 @@ class ItemService extends DataSource {
   async getEssentials(userId: string): Promise<ItemEssential[] | unknown> {
     try {
       const { rows } = await this.db.query(
-        `SELECT i."itemId", i."itemName", ui."creationDate" 
-        FROM public."userItem" ui, public."userEssentials" ue, public."item" i
+        `SELECT i."itemId", i."itemName", ui."creationDate", c."categoryName" 
+        FROM public."userItem" ui, public."userEssentials" ue, public."item" i, public."category" c
         WHERE ui."itemId" = ue."itemId" AND ui."itemId" = i."itemId"
+        AND i."categoryId" = c."categoryId"
         AND ui."userId" = $1
         AND ui."isEssential" = true
         AND ui."creationDate" IN (SELECT "creationDate"
