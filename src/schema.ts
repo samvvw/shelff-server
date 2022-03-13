@@ -1,6 +1,7 @@
 import { gql } from 'apollo-server'
 import {
   addUser,
+  updateUser,
   addUserItem,
   getUser,
   getUserItems,
@@ -84,7 +85,7 @@ const typeDefs = gql`
 
   type Mutation {
     addUser(userId: String, email: String, fullName: String): User
-    updateUser(fullName: String): User
+    updateUser(userId: String ,fullName: String): User
     addItem(itemId: String, itemName: String, categoryId: Int): Item
     updateItem(itemId: String, itemName: String, categoryId: Int): Item
     addUserItem(
@@ -120,6 +121,7 @@ const resolvers = {
   },
   Mutation: {
     addUser: addUser,
+    updateUser: updateUser,
     addItem: addItem,
     addUserItem: addUserItem,
     updateItem: updateItem,

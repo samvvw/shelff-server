@@ -73,6 +73,31 @@ class UserService extends DataSource {
     }
   }
 
+  async updateUser(
+    userId: string,
+    fullName: string
+  ): Promise<User | unknown> {
+    try {
+      console.log(userId,fullName)
+      const response = await this.db.query(
+        'UPDATE public.user SET "fullName"=$2 WHERE "userId"=$1',
+        [userId, fullName]
+      )
+
+      if (response) {
+        const { rows } = await this.db.query(
+          'SELECT * FROM public.user WHERE "userId"=$1',
+          [userId]
+        )
+
+        return rows[0] as User
+      }
+    } catch (error) {
+      console.log(error)
+      return error
+    }
+  }
+
   async addUserItem(
     userId: string,
     itemId: string,
