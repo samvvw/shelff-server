@@ -15,6 +15,17 @@ export const getItems = async (
   return response
 }
 
+export const findItem = async (
+  parent: undefined,
+  args: Item,
+  { dataSources }: ItemContext
+) => {
+  const response: Item | unknown = await dataSources.itemService.findItem(
+    args.itemId
+  )
+  return response
+}
+
 export const getItemActions = async (
   parent: undefined,
   args: undefined,

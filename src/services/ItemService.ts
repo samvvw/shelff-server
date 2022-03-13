@@ -20,6 +20,20 @@ class ItemService extends DataSource {
     }
   }
 
+  async findItem(itemId: string): Promise<Item | unknown> {
+    try {
+      const { rows } = await this.db.query(
+        'SELECT i."itemId", i."itemName", i."creationDate", c."categoryName" FROM public.item i, public.category c WHERE i."itemId" = $1 AND i."categoryId" = c."categoryId"',
+        [itemId]
+      )
+
+      return rows[0] as Item
+    } catch (error) {
+      console.log(error)
+      return error
+    }
+  }
+
   async getItemActions(): Promise<ItemAction[] | unknown> {
     try {
       const { rows } = await this.db.query('SELECT * FROM public."itemAction"')
