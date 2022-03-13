@@ -9,6 +9,7 @@ import {
 } from './controllers/userControllers'
 import {
   getItems,
+  findItem,
   getItemActions,
   addItem,
   updateItem,
@@ -74,6 +75,7 @@ const typeDefs = gql`
   type Query {
     locations: [Location]
     items: [Item]
+    findItem(itemId: String!): Item
     categories: [Category]
     itemActions: [ItemAction]
     shelves: [Shelf]
@@ -112,6 +114,7 @@ const resolvers = {
     user: getUser,
     locations: getLocations,
     items: getItems,
+    findItem: findItem,
     userItems: getUserItems,
     categories: getCategories,
     shelves: getShelves,
