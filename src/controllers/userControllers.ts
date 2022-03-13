@@ -32,6 +32,21 @@ export const addUser = async (
   return response
 }
 
+export const updateUser = async (
+  parent: undefined,
+  args: User,
+  { dataSources }: UserContext
+) => {
+  const { userId, fullName } = args
+
+  const response = await dataSources.userService.updateUser(
+    userId,
+    fullName
+  )
+
+  return response
+}
+
 export const addUserItem = async (
   parent: undefined,
   args: UserItem,
