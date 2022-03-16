@@ -39,10 +39,7 @@ export const updateUser = async (
 ) => {
   const { userId, fullName } = args
 
-  const response = await dataSources.userService.updateUser(
-    userId,
-    fullName
-  )
+  const response = await dataSources.userService.updateUser(userId, fullName)
 
   return response
 }
@@ -61,6 +58,16 @@ export const addUserItem = async (
     locationId,
     shelfId
   )
+  return response
+}
+
+export const addUserItemList = async (
+  parent: undefined,
+  args: { itemList: UserItem[] },
+  { dataSources }: UserContext
+) => {
+  const response = await dataSources.userService.addUserItemList(args.itemList)
+
   return response
 }
 

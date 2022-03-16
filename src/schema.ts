@@ -7,6 +7,7 @@ import {
   getUserItems,
   updateUserItem,
   deleteUserItem,
+  addUserItemList,
 } from './controllers/userControllers'
 import {
   getItems,
@@ -40,6 +41,7 @@ const typeDefs = gql`
   type UserItem {
     itemId: String!
     userId: String!
+    creationDate: String!
     expirationDate: String!
     quantity: Int!
     locationName: String!
@@ -73,6 +75,15 @@ const typeDefs = gql`
     categoryName: String!
   }
 
+  input UserItemArgs {
+    itemId: String
+    userId: String
+    quantity: Int
+    expirationDate: String
+    shelfId: Int
+    locationId: Int
+  }
+
   type Query {
     locations: [Location]
     items: [Item]
@@ -87,7 +98,7 @@ const typeDefs = gql`
 
   type Mutation {
     addUser(userId: String, email: String, fullName: String): User
-    updateUser(userId: String ,fullName: String): User
+    updateUser(userId: String, fullName: String): User
     addItem(itemId: String, itemName: String, categoryId: Int): Item
     updateItem(itemId: String, itemName: String, categoryId: Int): Item
     addUserItem(
@@ -98,6 +109,7 @@ const typeDefs = gql`
       shelfId: Int
       locationId: Int
     ): [UserItem]
+    addUserItemList(itemList: [UserItemArgs!]!): [UserItem]
     updateUserItem(
       itemId: String
       userId: String
@@ -127,6 +139,7 @@ const resolvers = {
     updateUser: updateUser,
     addItem: addItem,
     addUserItem: addUserItem,
+    addUserItemList: addUserItemList,
     updateItem: updateItem,
     updateUserItem: updateUserItem,
     deleteUserItem: deleteUserItem,
