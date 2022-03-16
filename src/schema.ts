@@ -47,6 +47,7 @@ const typeDefs = gql`
     quantity: Int!
     locationName: String!
     shelfName: String!
+    isEssential: Boolean!
   }
 
   type Category {
@@ -84,6 +85,7 @@ const typeDefs = gql`
     expirationDate: String
     shelfId: Int
     locationId: Int
+    isEssential: Boolean
   }
 
   type Query {
@@ -110,17 +112,24 @@ const typeDefs = gql`
       expirationDate: String
       shelfId: Int
       locationId: Int
+      isEssential: Boolean
     ): [UserItem]
     addUserItemList(itemList: [UserItemArgs!]!): [UserItem]
     updateUserItem(
       itemId: String
       userId: String
+      creationDate: String
       quantity: Int
       expirationDate: String
       shelfId: Int
       locationId: Int
+      isEssential: Boolean
     ): UserItem
-    deleteUserItem(itemId: String, userId: String): Boolean
+    deleteUserItem(
+      itemId: String
+      userId: String
+      creationDate: String
+    ): Boolean
     removeEssentialItem(itemId: String, userId: String): [ItemEssential]
   }
 `

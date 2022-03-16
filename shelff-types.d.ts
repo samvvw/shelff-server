@@ -51,6 +51,7 @@ export interface UserItem {
   quantity: number
   locationId: number
   shelfId: number
+  isEssential: boolean
 }
 
 export interface UserItemResolver {
@@ -61,6 +62,7 @@ export interface UserItemResolver {
   quantity: number
   locationName: string
   shelfName: string
+  isEssential: boolean
 }
 
 export interface Category {
