@@ -41,6 +41,7 @@ const typeDefs = gql`
 
   type UserItem {
     itemId: String!
+    itemName: String
     userId: String!
     creationDate: String!
     expirationDate: String!
