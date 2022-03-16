@@ -118,12 +118,18 @@ const typeDefs = gql`
     updateUserItem(
       itemId: String
       userId: String
+      creationDate: String
       quantity: Int
       expirationDate: String
       shelfId: Int
       locationId: Int
+      isEssential: Boolean
     ): UserItem
-    deleteUserItem(itemId: String, userId: String): Boolean
+    deleteUserItem(
+      itemId: String
+      userId: String
+      creationDate: String
+    ): Boolean
     removeEssentialItem(itemId: String, userId: String): [ItemEssential]
   }
 `
