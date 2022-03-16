@@ -121,6 +121,20 @@ class UserService extends DataSource {
 
       if (response) {
         const { rows } = await this.db.query(
+          `SELECT * FROM public."userEssentials" WHERE "userId" = $1 AND "itemId" = $2`,
+          [userId, itemId]
+        )
+
+        if (rows.length === 0 && isEssential) {
+          await this.db.query(
+            `INSERT INTO public."userEssentials" ("userId", "itemId") VALUES ($1, $2)`,
+            [userId, itemId]
+          )
+        }
+      }
+
+      if (response) {
+        const { rows } = await this.db.query(
           `SELECT ui."itemId", ui."userId", ui."creationDate", ui."expirationDate", ui."quantity", l."locationName", s."shelfName", ui."isEssential" 
            FROM public."userItem" ui, public.location l, public.shelf s 
            WHERE ui."locationId" = l."locationId" 
@@ -214,6 +228,27 @@ class UserService extends DataSource {
           creationDate.toString(),
         ]
       )
+
+      if (response) {
+        const { rows } = await this.db.query(
+          `SELECT * FROM public."userEssentials" WHERE "userId" = $1 AND "itemId" = $2`,
+          [userId, itemId]
+        )
+
+        if (rows.length === 0 && isEssential) {
+          await this.db.query(
+            `INSERT INTO public."userEssentials" ("userId", "itemId") VALUES ($1, $2)`,
+            [userId, itemId]
+          )
+        }
+
+        if (rows.length > 0 && !isEssential) {
+          await this.db.query(
+            `DELETE FROM public."userEssentials" WHERE "userId" = $1 AND "itemId" = $2`,
+            [userId, itemId]
+          )
+        }
+      }
 
       if (response) {
         const { rows } = await this.db.query(
