@@ -49,14 +49,23 @@ export const addUserItem = async (
   args: UserItem,
   { dataSources }: UserContext
 ) => {
-  const { userId, itemId, quantity, expirationDate, locationId, shelfId } = args
+  const {
+    userId,
+    itemId,
+    quantity,
+    expirationDate,
+    locationId,
+    shelfId,
+    isEssential,
+  } = args
   const response = await dataSources.userService.addUserItem(
     userId,
     itemId,
     quantity,
     expirationDate,
     locationId,
-    shelfId
+    shelfId,
+    isEssential
   )
   return response
 }
@@ -76,14 +85,25 @@ export const updateUserItem = async (
   args: UserItem,
   { dataSources }: UserContext
 ) => {
-  const { userId, itemId, quantity, expirationDate, locationId, shelfId } = args
-  const response = await dataSources.userService.updateUserItem(
+  const {
     userId,
     itemId,
+    creationDate,
     quantity,
     expirationDate,
     locationId,
-    shelfId
+    shelfId,
+    isEssential,
+  } = args
+  const response = await dataSources.userService.updateUserItem(
+    userId,
+    itemId,
+    creationDate,
+    quantity,
+    expirationDate,
+    locationId,
+    shelfId,
+    isEssential
   )
   return response
 }
@@ -93,8 +113,12 @@ export const deleteUserItem = async (
   args: UserItem,
   { dataSources }: UserContext
 ) => {
-  const { userId, itemId } = args
-  const response = await dataSources.userService.deleteUserItem(userId, itemId)
+  const { userId, itemId, creationDate } = args
+  const response = await dataSources.userService.deleteUserItem(
+    userId,
+    itemId,
+    creationDate
+  )
   return response
 }
 

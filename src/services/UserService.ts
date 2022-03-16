@@ -25,8 +25,8 @@ class UserService extends DataSource {
   async getUserItems(userId: string): Promise<UserItem[] | unknown> {
     try {
       const { rows } = await this.db.query(
-        `SELECT ui."itemId", i."itemName", ui."userId", ui."creationDate", ui."expirationDate", ui."quantity", l."locationName", s."shelfName" 
-         FROM public."userItem" ui, public.location l, public.shelf s, public.item i
+        `SELECT ui."itemId", i."itemName", ui."userId", ui."creationDate", ui."expirationDate", ui."quantity", l."locationName", s."shelfName", ui."isEssential" 
+         FROM public."userItem" ui, public.location l, public.shelf s, public.item i 
          WHERE ui."locationId" = l."locationId" AND ui."shelfId" = s."shelfId" 
          AND ui."userId" = $1 AND ui."itemId" = i."itemId"`,
         [userId]
@@ -101,12 +101,13 @@ class UserService extends DataSource {
     quantity: number,
     expirationDate: Date,
     locationId: number,
-    shelfId: number
+    shelfId: number,
+    isEssential: boolean
   ): Promise<UserItem[] | unknown> {
     try {
       const response = await this.db.query(
-        `INSERT INTO public."userItem" ("userId", "itemId", "quantity", "expirationDate", "locationId", "shelfId") 
-         VALUES ($1, $2, $3, $4, $5, $6)`,
+        `INSERT INTO public."userItem" ("userId", "itemId", "quantity", "expirationDate", "locationId", "shelfId", "isEssential") 
+         VALUES ($1, $2, $3, $4, $5, $6, $7)`,
         [
           userId,
           itemId,
@@ -114,12 +115,13 @@ class UserService extends DataSource {
           expirationDate.toString(),
           locationId.toString(),
           shelfId.toString(),
+          isEssential.toString(),
         ]
       )
 
       if (response) {
         const { rows } = await this.db.query(
-          `SELECT ui."itemId", ui."userId", ui."expirationDate",ui."creationDate", ui."quantity", l."locationName", s."shelfName" 
+          `SELECT ui."itemId", ui."userId", ui."creationDate", ui."expirationDate", ui."quantity", l."locationName", s."shelfName", ui."isEssential" 
            FROM public."userItem" ui, public.location l, public.shelf s 
            WHERE ui."locationId" = l."locationId" 
            AND ui."shelfId" = s."shelfId" 
@@ -143,6 +145,7 @@ class UserService extends DataSource {
       expirationDate: Date
       locationId: number
       shelfId: number
+      isEssential: boolean
     }[]
   ): Promise<UserItem[] | unknown> {
     const promiseSave = new Promise<UserItem[]>((resolve, reject) => {
@@ -157,6 +160,7 @@ class UserService extends DataSource {
             expirationDate,
             locationId,
             shelfId,
+            isEssential,
           } = item
 
           const newItem = (await this.addUserItem(
@@ -165,7 +169,8 @@ class UserService extends DataSource {
             quantity,
             expirationDate,
             locationId,
-            shelfId
+            shelfId,
+            isEssential
           )) as UserItem
 
           savedItems.push(newItem)
@@ -186,16 +191,18 @@ class UserService extends DataSource {
   async updateUserItem(
     userId: string,
     itemId: string,
+    creationDate: Date,
     quantity: number,
     expirationDate: Date,
     locationId: number,
-    shelfId: number
+    shelfId: number,
+    isEssential: boolean
   ): Promise<UserItem | unknown> {
     try {
       const response = await this.db.query(
         `UPDATE public."userItem" 
-         SET "quantity" = $3, "expirationDate" = $4, "locationId" = $5, "shelfId" = $6 
-         WHERE "userId" = $1 AND "itemId" = $2`,
+         SET "quantity" = $3, "expirationDate" = $4, "locationId" = $5, "shelfId" = $6, "isEssential" = $7 
+         WHERE "userId" = $1 AND "itemId" = $2 AND "creationDate" = $8`,
         [
           userId,
           itemId,
@@ -203,17 +210,19 @@ class UserService extends DataSource {
           expirationDate.toString(),
           locationId.toString(),
           shelfId.toString(),
+          isEssential.toString(),
+          creationDate.toString(),
         ]
       )
 
       if (response) {
         const { rows } = await this.db.query(
-          `SELECT ui."itemId", ui."userId", ui."expirationDate", ui."quantity", l."locationName", s."shelfName" 
+          `SELECT ui."itemId", ui."userId", ui."creationDate", ui."expirationDate", ui."quantity", l."locationName", s."shelfName", ui."isEssential" 
            FROM public."userItem" ui, public.location l, public.shelf s 
            WHERE ui."locationId" = l."locationId" 
            AND ui."shelfId" = s."shelfId" 
-           AND ui."userId" = $1 AND ui."itemId" = $2`,
-          [userId, itemId]
+           AND ui."userId" = $1 AND ui."itemId" = $2 AND ui."creationDate" = $3`,
+          [userId, itemId, creationDate.toString()]
         )
 
         return rows[0] as UserItem
@@ -226,20 +235,21 @@ class UserService extends DataSource {
 
   async deleteUserItem(
     userId: string,
-    itemId: string
+    itemId: string,
+    creationDate: Date
   ): Promise<boolean | unknown> {
     try {
       const query = await this.db.query(
         `SELECT * 
          FROM public."userItem" 
-         WHERE "userId" = $1 AND "itemId" = $2`,
-        [userId, itemId]
+         WHERE "userId" = $1 AND "itemId" = $2 AND "creationDate" = $3`,
+        [userId, itemId, creationDate.toString()]
       )
 
       if (query && query.rows.length) {
         const response = await this.db.query(
-          `DELETE FROM public."userItem" WHERE "userId" = $1 AND "itemId" = $2`,
-          [userId, itemId]
+          `DELETE FROM public."userItem" WHERE "userId" = $1 AND "itemId" = $2 AND "creationDate" = $3`,
+          [userId, itemId, creationDate.toString()]
         )
 
         if (response) return true
