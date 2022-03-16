@@ -6,6 +6,7 @@ import {
   getUserItems,
   updateUserItem,
   deleteUserItem,
+  removeEssentialItem,
 } from './controllers/userControllers'
 import {
   getItems,
@@ -104,6 +105,7 @@ const typeDefs = gql`
       locationId: Int
     ): UserItem
     deleteUserItem(itemId: String, userId: String): Boolean
+    removeEssentialItem(itemId: String, userId: String): [ItemEssential]
   }
 `
 
@@ -125,6 +127,7 @@ const resolvers = {
     updateItem: updateItem,
     updateUserItem: updateUserItem,
     deleteUserItem: deleteUserItem,
+    removeEssentialItem: removeEssentialItem,
   },
 }
 

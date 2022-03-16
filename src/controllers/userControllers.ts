@@ -75,3 +75,16 @@ export const deleteUserItem = async (
   const response = await dataSources.userService.deleteUserItem(userId, itemId)
   return response
 }
+
+export const removeEssentialItem = async (
+  parent: undefined,
+  args: UserItem,
+  { dataSources }: UserContext
+) => {
+  const { userId, itemId } = args
+  const response = await dataSources.userService.removeEssentialItem(
+    userId,
+    itemId
+  )
+  return response
+}
