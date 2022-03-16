@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS public."userItem"
 (
     "userId" character varying(100) NOT NULL,
     "itemId" character varying(50) NOT NULL,
-    "creationDate" timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "creationDate" timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "quantity" integer NOT NULL DEFAULT 0,
     "expirationDate" date NOT NULL,
     "locationId" integer NOT NULL,
@@ -65,7 +65,7 @@ CREATE TABLE IF NOT EXISTS public."userEssentials"
 (
     "userId" character varying(100) NOT NULL,
     "itemId" character varying(50) NOT NULL,
-    "creationDate" timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "creationDate" timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT "userEssentials_pk" PRIMARY KEY ("userId", "itemId")
 );
 
