@@ -25,10 +25,10 @@ class UserService extends DataSource {
   async getUserItems(userId: string): Promise<UserItem[] | unknown> {
     try {
       const { rows } = await this.db.query(
-        `SELECT ui."itemId", ui."userId", ui."creationDate", ui."expirationDate", ui."quantity", l."locationName", s."shelfName" 
-         FROM public."userItem" ui, public.location l, public.shelf s 
+        `SELECT ui."itemId", i."itemName", ui."userId", ui."creationDate", ui."expirationDate", ui."quantity", l."locationName", s."shelfName" 
+         FROM public."userItem" ui, public.location l, public.shelf s, public.item i
          WHERE ui."locationId" = l."locationId" AND ui."shelfId" = s."shelfId" 
-         AND ui."userId" = $1`,
+         AND ui."userId" = $1 AND ui."itemId" = i."itemId"`,
         [userId]
       )
 
@@ -119,7 +119,7 @@ class UserService extends DataSource {
 
       if (response) {
         const { rows } = await this.db.query(
-          `SELECT ui."itemId", ui."userId", ui."expirationDate", ui."quantity", l."locationName", s."shelfName" 
+          `SELECT ui."itemId", ui."userId", ui."expirationDate",ui."creationDate", ui."quantity", l."locationName", s."shelfName" 
            FROM public."userItem" ui, public.location l, public.shelf s 
            WHERE ui."locationId" = l."locationId" 
            AND ui."shelfId" = s."shelfId" 
