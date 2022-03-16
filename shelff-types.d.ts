@@ -51,6 +51,7 @@ export interface UserItem {
   quantity: number
   locationId: number
   shelfId: number
+  isEssential: boolean
 }
 
 export interface UserItemResolver {

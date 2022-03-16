@@ -25,7 +25,7 @@ class UserService extends DataSource {
   async getUserItems(userId: string): Promise<UserItem[] | unknown> {
     try {
       const { rows } = await this.db.query(
-        `SELECT ui."itemId", ui."userId", ui."creationDate", ui."expirationDate", ui."quantity", l."locationName", s."shelfName" 
+        `SELECT ui."itemId", ui."userId", ui."creationDate", ui."expirationDate", ui."quantity", l."locationName", s."shelfName", ui."isEssential" 
          FROM public."userItem" ui, public.location l, public.shelf s 
          WHERE ui."locationId" = l."locationId" AND ui."shelfId" = s."shelfId" 
          AND ui."userId" = $1`,

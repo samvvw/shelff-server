@@ -47,6 +47,7 @@ const typeDefs = gql`
     quantity: Int!
     locationName: String!
     shelfName: String!
+    isEssential: Boolean!
   }
 
   type Category {
@@ -84,6 +85,7 @@ const typeDefs = gql`
     expirationDate: String
     shelfId: Int
     locationId: Int
+    isEssential: Boolean
   }
 
   type Query {
