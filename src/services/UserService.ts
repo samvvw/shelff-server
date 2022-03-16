@@ -1,5 +1,5 @@
 import { DataSource } from 'apollo-datasource'
-import { DBTypes, User, UserItem } from '../../shelff-types'
+import { DBTypes, ItemEssential, User, UserItem } from '../../shelff-types'
 
 class UserService extends DataSource {
   db: DBTypes
@@ -246,6 +246,49 @@ class UserService extends DataSource {
       }
 
       return false
+    } catch (error) {
+      console.log(error)
+      return error
+    }
+  }
+
+  async removeEssentialItem(
+    userId: string,
+    itemId: string
+  ): Promise<ItemEssential[] | unknown> {
+    try {
+      const query = await this.db.query(
+        `SELECT * 
+         FROM public."userEssentials" 
+         WHERE "userId" = $1 AND "itemId" = $2`,
+        [userId, itemId]
+      )
+
+      if (query && query.rows.length) {
+        await this.db.query(
+          `DELETE FROM public."userEssentials"
+           WHERE "userId" = $1 AND "itemId" = $2`,
+          [userId, itemId]
+        )
+
+        const { rows } = await this.db.query(
+          `SELECT i."itemId", i."itemName", ui."creationDate", c."categoryName" 
+        FROM public."userItem" ui, public."userEssentials" ue, public."item" i, public."category" c
+        WHERE ui."itemId" = ue."itemId" AND ui."itemId" = i."itemId"
+        AND i."categoryId" = c."categoryId"
+        AND ui."userId" = $1
+        AND ui."isEssential" = true
+        AND ui."creationDate" IN (SELECT "creationDate"
+        FROM public."userItem"
+        WHERE "userId" = $1
+        AND ui."itemId" = "itemId"
+        ORDER BY "creationDate" DESC
+        LIMIT 1)`,
+          [userId]
+        )
+
+        return rows as ItemEssential[]
+      }
     } catch (error) {
       console.log(error)
       return error
