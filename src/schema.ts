@@ -112,6 +112,7 @@ const typeDefs = gql`
       expirationDate: String
       shelfId: Int
       locationId: Int
+      isEssential: Boolean
     ): [UserItem]
     addUserItemList(itemList: [UserItemArgs!]!): [UserItem]
     updateUserItem(

@@ -49,14 +49,23 @@ export const addUserItem = async (
   args: UserItem,
   { dataSources }: UserContext
 ) => {
-  const { userId, itemId, quantity, expirationDate, locationId, shelfId } = args
+  const {
+    userId,
+    itemId,
+    quantity,
+    expirationDate,
+    locationId,
+    shelfId,
+    isEssential,
+  } = args
   const response = await dataSources.userService.addUserItem(
     userId,
     itemId,
     quantity,
     expirationDate,
     locationId,
-    shelfId
+    shelfId,
+    isEssential
   )
   return response
 }

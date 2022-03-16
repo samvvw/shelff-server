@@ -101,12 +101,13 @@ class UserService extends DataSource {
     quantity: number,
     expirationDate: Date,
     locationId: number,
-    shelfId: number
+    shelfId: number,
+    isEssential: boolean
   ): Promise<UserItem[] | unknown> {
     try {
       const response = await this.db.query(
-        `INSERT INTO public."userItem" ("userId", "itemId", "quantity", "expirationDate", "locationId", "shelfId") 
-         VALUES ($1, $2, $3, $4, $5, $6)`,
+        `INSERT INTO public."userItem" ("userId", "itemId", "quantity", "expirationDate", "locationId", "shelfId", "isEssential") 
+         VALUES ($1, $2, $3, $4, $5, $6, $7)`,
         [
           userId,
           itemId,
@@ -114,12 +115,13 @@ class UserService extends DataSource {
           expirationDate.toString(),
           locationId.toString(),
           shelfId.toString(),
+          isEssential.toString(),
         ]
       )
 
       if (response) {
         const { rows } = await this.db.query(
-          `SELECT ui."itemId", ui."userId", ui."expirationDate", ui."quantity", l."locationName", s."shelfName" 
+          `SELECT ui."itemId", ui."userId", ui."creationDate", ui."expirationDate", ui."quantity", l."locationName", s."shelfName", ui."isEssential" 
            FROM public."userItem" ui, public.location l, public.shelf s 
            WHERE ui."locationId" = l."locationId" 
            AND ui."shelfId" = s."shelfId" 
@@ -143,6 +145,7 @@ class UserService extends DataSource {
       expirationDate: Date
       locationId: number
       shelfId: number
+      isEssential: boolean
     }[]
   ): Promise<UserItem[] | unknown> {
     const promiseSave = new Promise<UserItem[]>((resolve, reject) => {
@@ -157,6 +160,7 @@ class UserService extends DataSource {
             expirationDate,
             locationId,
             shelfId,
+            isEssential,
           } = item
 
           const newItem = (await this.addUserItem(
@@ -165,7 +169,8 @@ class UserService extends DataSource {
             quantity,
             expirationDate,
             locationId,
-            shelfId
+            shelfId,
+            isEssential
           )) as UserItem
 
           savedItems.push(newItem)
