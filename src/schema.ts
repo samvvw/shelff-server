@@ -70,6 +70,7 @@ const typeDefs = gql`
     itemName: String!
     creationDate: String!
     categoryName: String!
+    categoryId: Int!
   }
 
   type Query {
