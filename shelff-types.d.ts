@@ -46,6 +46,7 @@ export interface ItemResolver {
 export interface UserItem {
   itemId: string
   userId: string
+  creationDate: Date
   expirationDate: Date
   quantity: number
   locationId: number
@@ -55,6 +56,7 @@ export interface UserItem {
 export interface UserItemResolver {
   itemId: string
   userId: string
+  creationDate: Date
   expirationDate: Date
   quantity: number
   locationName: string

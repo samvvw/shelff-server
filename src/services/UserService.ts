@@ -25,7 +25,7 @@ class UserService extends DataSource {
   async getUserItems(userId: string): Promise<UserItem[] | unknown> {
     try {
       const { rows } = await this.db.query(
-        `SELECT ui."itemId", ui."userId", ui."expirationDate", ui."quantity", l."locationName", s."shelfName" 
+        `SELECT ui."itemId", ui."userId", ui."creationDate", ui."expirationDate", ui."quantity", l."locationName", s."shelfName" 
          FROM public."userItem" ui, public.location l, public.shelf s 
          WHERE ui."locationId" = l."locationId" AND ui."shelfId" = s."shelfId" 
          AND ui."userId" = $1`,
@@ -73,12 +73,9 @@ class UserService extends DataSource {
     }
   }
 
-  async updateUser(
-    userId: string,
-    fullName: string
-  ): Promise<User | unknown> {
+  async updateUser(userId: string, fullName: string): Promise<User | unknown> {
     try {
-      console.log(userId,fullName)
+      console.log(userId, fullName)
       const response = await this.db.query(
         'UPDATE public.user SET "fullName"=$2 WHERE "userId"=$1',
         [userId, fullName]
@@ -136,6 +133,54 @@ class UserService extends DataSource {
       console.log(error)
       return error
     }
+  }
+
+  async addUserItemList(
+    itemList: {
+      userId: string
+      itemId: string
+      quantity: number
+      expirationDate: Date
+      locationId: number
+      shelfId: number
+    }[]
+  ): Promise<UserItem[] | unknown> {
+    const promiseSave = new Promise<UserItem[]>((resolve, reject) => {
+      const savedItems: UserItem[] = []
+
+      itemList.forEach(async (item, i) => {
+        try {
+          const {
+            userId,
+            itemId,
+            quantity,
+            expirationDate,
+            locationId,
+            shelfId,
+          } = item
+
+          const newItem = (await this.addUserItem(
+            userId,
+            itemId,
+            quantity,
+            expirationDate,
+            locationId,
+            shelfId
+          )) as UserItem
+
+          savedItems.push(newItem)
+          if (i === itemList.length - 1) {
+            resolve([newItem])
+          }
+        } catch (error) {
+          console.log(error)
+          reject(error)
+        }
+      })
+      return savedItems
+    })
+    const result = await promiseSave
+    return result[0]
   }
 
   async updateUserItem(
