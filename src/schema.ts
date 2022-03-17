@@ -47,7 +47,9 @@ const typeDefs = gql`
     expirationDate: String!
     quantity: Int!
     locationName: String!
+    locationId: Int!
     shelfName: String!
+    shelfId: Int!
     isEssential: Boolean!
   }
 
