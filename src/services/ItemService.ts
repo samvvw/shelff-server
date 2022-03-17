@@ -51,6 +51,15 @@ class ItemService extends DataSource {
     categoryId: number
   ): Promise<Item | unknown> {
     try {
+      const { rows: results } = await this.db.query(
+        'SELECT i."itemId", i."itemName", i."creationDate", c."categoryName" FROM public.item i, public.category c WHERE c."categoryId" = i."categoryId" AND "itemId"=$1',
+        [itemId]
+      )
+
+      if (results?.length > 0) {
+        return results[0] as Item
+      }
+
       const response = await this.db.query(
         'INSERT INTO public.item ("itemId", "itemName", "categoryId") VALUES ($1, $2, $3)',
         [itemId, itemName, categoryId.toString()]
