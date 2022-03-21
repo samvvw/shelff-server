@@ -89,7 +89,6 @@ export interface ItemAction {
 export interface ItemEssential {
   itemId: string
   itemName: string
-  creationDate: Date
   categoryName: string
   categoryId: number
 }
