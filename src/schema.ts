@@ -76,7 +76,6 @@ const typeDefs = gql`
   type ItemEssential {
     itemId: String!
     itemName: String!
-    creationDate: String!
     categoryName: String!
     categoryId: Int!
   }

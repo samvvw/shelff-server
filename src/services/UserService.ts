@@ -317,18 +317,13 @@ class UserService extends DataSource {
         )
 
         const { rows } = await this.db.query(
-          `SELECT i."itemId", i."itemName", ui."creationDate", c."categoryName" 
-        FROM public."userItem" ui, public."userEssentials" ue, public."item" i, public."category" c
-        WHERE ui."itemId" = ue."itemId" AND ui."itemId" = i."itemId"
-        AND i."categoryId" = c."categoryId"
-        AND ui."userId" = $1
-        AND ui."isEssential" = true
-        AND ui."creationDate" IN (SELECT "creationDate"
-        FROM public."userItem"
-        WHERE "userId" = $1
-        AND ui."itemId" = "itemId"
-        ORDER BY "creationDate" DESC
-        LIMIT 1)`,
+          `SELECT DISTINCT i."itemId", i."itemName", c."categoryName", c."categoryId"
+          FROM public."userItem" ui, public."userEssentials" ue, public."item" i, public."category" c
+          WHERE ui."itemId" = ue."itemId" 
+          AND ui."itemId" = i."itemId"
+          AND i."categoryId" = c."categoryId"
+          AND ue."userId" = ui."userId"
+          AND ue."userId" = $1`,
           [userId]
         )
 
