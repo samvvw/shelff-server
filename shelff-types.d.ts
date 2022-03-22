@@ -46,6 +46,7 @@ export interface ItemResolver {
 export interface UserItem {
   itemId: string
   itemName?: string
+  categoryName?: string
   userId: string
   creationDate: Date
   expirationDate: Date

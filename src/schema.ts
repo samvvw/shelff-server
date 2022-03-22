@@ -51,6 +51,7 @@ const typeDefs = gql`
     shelfName: String!
     shelfId: Int!
     isEssential: Boolean!
+    categoryName: String
   }
 
   type Category {
