@@ -5,6 +5,7 @@ import {
   ItemEssential,
   User,
 } from '../../shelff-types'
+import { ForbiddenError } from 'apollo-server-express'
 
 export const getItems = async (
   parent: undefined,
@@ -67,9 +68,13 @@ export const updateItem = async (
 export const getEssentials = async (
   parent: undefined,
   args: User,
-  { dataSources }: ItemContext
+  { dataSources, user }: ItemContext
 ) => {
-  const response: ItemEssential[] | unknown =
-    await dataSources.itemService.getEssentials(args.userId)
-  return response
+  if (user) {
+    const response: ItemEssential[] | unknown =
+      await dataSources.itemService.getEssentials(args.userId)
+    return response
+  } else {
+    throw new ForbiddenError('Not authenticated')
+  }
 }

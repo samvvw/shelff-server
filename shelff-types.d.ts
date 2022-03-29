@@ -14,11 +14,20 @@ export interface UserContext {
   dataSources: {
     userService: UserService
   }
+  user: {
+    [key: string]: string
+  }
+  requestBody: {
+    [key: string]: string
+  }
 }
 
 export interface ItemContext {
   dataSources: {
     itemService: ItemService
+  }
+  user: {
+    [key: string]: string
   }
 }
 

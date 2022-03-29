@@ -1,53 +1,69 @@
 import { User, UserContext, UserItem } from '../../shelff-types'
+import { ForbiddenError } from 'apollo-server'
 
 export const getUser = async (
   parent: undefined,
   args: User,
-  { dataSources }: UserContext
+  { dataSources, user }: UserContext
 ) => {
-  const response = await dataSources.userService.getUser(args.userId)
-  return response
+  if (user) {
+    const response = await dataSources.userService.getUser(args.userId)
+    return response
+  } else {
+    throw new ForbiddenError('Not authenticated')
+  }
 }
 
 export const getUserItems = async (
   parent: undefined,
   args: UserItem,
-  { dataSources }: UserContext
+  { dataSources, user }: UserContext
 ) => {
-  const response = await dataSources.userService.getUserItems(args.userId)
-  return response
+  if (user) {
+    const response = await dataSources.userService.getUserItems(args.userId)
+    return response
+  } else {
+    return []
+  }
 }
 
 export const addUser = async (
   parent: undefined,
   args: User,
-  { dataSources }: UserContext
+  { dataSources, user }: UserContext
 ) => {
-  const { userId, fullName, email } = args
-  const response = await dataSources.userService.addUser(
-    userId,
-    fullName,
-    email
-  )
-  return response
+  if (user) {
+    const { userId, fullName, email } = args
+    const response = await dataSources.userService.addUser(
+      userId,
+      fullName,
+      email
+    )
+    return response
+  } else {
+    throw new ForbiddenError('Not authenticated')
+  }
 }
 
 export const updateUser = async (
   parent: undefined,
   args: User,
-  { dataSources }: UserContext
+  { dataSources, user }: UserContext
 ) => {
-  const { userId, fullName } = args
+  if (user) {
+    const { userId, fullName } = args
+    const response = await dataSources.userService.updateUser(userId, fullName)
 
-  const response = await dataSources.userService.updateUser(userId, fullName)
-
-  return response
+    return response
+  } else {
+    throw new ForbiddenError('Not authenticated')
+  }
 }
 
 export const addUserItem = async (
   parent: undefined,
   args: UserItem,
-  { dataSources }: UserContext
+  { dataSources, user }: UserContext
 ) => {
   const {
     userId,
@@ -58,32 +74,42 @@ export const addUserItem = async (
     shelfId,
     isEssential,
   } = args
-  const response = await dataSources.userService.addUserItem(
-    userId,
-    itemId,
-    quantity,
-    expirationDate,
-    locationId,
-    shelfId,
-    isEssential
-  )
-  return response
+  if (user) {
+    const response = await dataSources.userService.addUserItem(
+      userId,
+      itemId,
+      quantity,
+      expirationDate,
+      locationId,
+      shelfId,
+      isEssential
+    )
+    return response
+  } else {
+    throw new ForbiddenError('Not authenticated')
+  }
 }
 
 export const addUserItemList = async (
   parent: undefined,
   args: { itemList: UserItem[] },
-  { dataSources }: UserContext
+  { dataSources, user }: UserContext
 ) => {
-  const response = await dataSources.userService.addUserItemList(args.itemList)
+  if (user) {
+    const response = await dataSources.userService.addUserItemList(
+      args.itemList
+    )
 
-  return response
+    return response
+  } else {
+    throw new ForbiddenError('Not authenticated')
+  }
 }
 
 export const updateUserItem = async (
   parent: undefined,
   args: UserItem,
-  { dataSources }: UserContext
+  { dataSources, user }: UserContext
 ) => {
   const {
     userId,
@@ -95,42 +121,55 @@ export const updateUserItem = async (
     shelfId,
     isEssential,
   } = args
-  const response = await dataSources.userService.updateUserItem(
-    userId,
-    itemId,
-    creationDate,
-    quantity,
-    expirationDate,
-    locationId,
-    shelfId,
-    isEssential
-  )
-  return response
+
+  if (user) {
+    const response = await dataSources.userService.updateUserItem(
+      userId,
+      itemId,
+      creationDate,
+      quantity,
+      expirationDate,
+      locationId,
+      shelfId,
+      isEssential
+    )
+    return response
+  } else {
+    throw new ForbiddenError('Not authenticated')
+  }
 }
 
 export const deleteUserItem = async (
   parent: undefined,
   args: UserItem,
-  { dataSources }: UserContext
+  { dataSources, user }: UserContext
 ) => {
-  const { userId, itemId, creationDate } = args
-  const response = await dataSources.userService.deleteUserItem(
-    userId,
-    itemId,
-    creationDate
-  )
-  return response
+  if (user) {
+    const { userId, itemId, creationDate } = args
+    const response = await dataSources.userService.deleteUserItem(
+      userId,
+      itemId,
+      creationDate
+    )
+    return response
+  } else {
+    throw new ForbiddenError('Not authenticated')
+  }
 }
 
 export const removeEssentialItem = async (
   parent: undefined,
   args: UserItem,
-  { dataSources }: UserContext
+  { dataSources, user }: UserContext
 ) => {
-  const { userId, itemId } = args
-  const response = await dataSources.userService.removeEssentialItem(
-    userId,
-    itemId
-  )
-  return response
+  if (user) {
+    const { userId, itemId } = args
+    const response = await dataSources.userService.removeEssentialItem(
+      userId,
+      itemId
+    )
+    return response
+  } else {
+    throw new ForbiddenError('Not authenticated')
+  }
 }
