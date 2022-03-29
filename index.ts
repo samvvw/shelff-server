@@ -10,6 +10,13 @@ import db from './src/config/dbConfig'
 import UserService from './src/services/UserService'
 import ItemService from './src/services/ItemService'
 import CatalogService from './src/services/CatalogService'
+import { initializeApp, cert } from 'firebase-admin/app'
+import { getAuth } from 'firebase-admin/auth'
+import { AuthenticationError } from 'apollo-server-express'
+
+initializeApp({
+  credential: cert(JSON.parse(process.env.FIREBASE_ADMIN as string)),
+})
 
 const PORT = process.env.PORT
 
@@ -24,6 +31,26 @@ const startApolloServer = async (
   const server = new ApolloServer({
     typeDefs,
     resolvers,
+    context: async ({ req }) => {
+      if (req.headers.authorization?.includes('Bearer ')) {
+        const token = req.headers.authorization?.split(' ')[1]
+        const user = await getAuth().verifyIdToken(token)
+        if (user) {
+          return {
+            user: {
+              userId: user.uid,
+              userEmail: user.email,
+            },
+          }
+        } else {
+          throw new AuthenticationError('Not authenticated')
+          // return null
+        }
+      } else {
+        // throw new ApolloError('Not authenticated', '401sfsd')
+        return null
+      }
+    },
     dataSources: () => ({
       userService: new UserService(db),
       itemService: new ItemService(db),
