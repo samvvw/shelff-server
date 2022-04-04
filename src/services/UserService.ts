@@ -280,12 +280,16 @@ class UserService extends DataSource {
          WHERE "userId" = $1 AND "itemId" = $2 AND "creationDate" = $3`,
         [userId, itemId, creationDate.toString()]
       )
+      console.log('--- args ---', userId, itemId, creationDate.toString());
+      console.log('--- query ---', query.rows);
 
       if (query && query.rows.length) {
         const response = await this.db.query(
           `DELETE FROM public."userItem" WHERE "userId" = $1 AND "itemId" = $2 AND "creationDate" = $3`,
           [userId, itemId, creationDate.toString()]
         )
+
+        console.log('----response remove ----', response);
 
         if (response) return true
       }

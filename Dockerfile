@@ -1,7 +1,6 @@
-FROM node:16
+FROM node:16-alpine3.14
 WORKDIR /app
 COPY ["package.json", "yarn.lock", "./"]
 RUN yarn
 COPY . ./
-RUN yarn build
 CMD ["yarn", "start"]
